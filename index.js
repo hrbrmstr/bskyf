@@ -17,31 +17,30 @@ const subscription = new Subscription({
   validate: (value) => value,
 });
 
-(async () => {
-	for await (const event of subscription) {
-		
-		try { 
-    const car = await readCar(event.blocks);
+for await (const event of subscription) {
+	
+	try { 
+		const car = await readCar(event.blocks);
 
-			for (const op of event.ops) {
-				if (op.action !== CREATE_ACTION) continue;
+		for (const op of event.ops) {
+			if (op.action !== CREATE_ACTION) continue;
 
-				const recBytes = car.blocks.get(op.cid)
-				if (!recBytes) continue;
+			const recBytes = car.blocks.get(op.cid)
+			if (!recBytes) continue;
 
-				const rec = cborToLexRecord(recBytes);
+			const rec = cborToLexRecord(recBytes);
 
-				const coll = op.path.split('/')[ 0 ];
-				if (coll !== COLLECTION) continue;
+			const coll = op.path.split('/')[ 0 ];
+			if (coll !== COLLECTION) continue;
 
-				console.log(
-					boxen(
-						`${chalk.blue(event.repo)} @ ${chalk.gray(rec.createdAt)}\n\n${chalk.cyan(wordwrap.wrap(rec.text, { width: WRAP_WIDTH }))}`,
-						{ padding: 1 }
-					)
-				);
-			}
-		} catch {
+			console.log(
+				boxen(
+					`${chalk.blue(event.repo)} @ ${chalk.gray(rec.createdAt)}\n\n${chalk.cyan(wordwrap.wrap(rec.text, { width: WRAP_WIDTH }))}`,
+					{ padding: 1 }
+				)
+			);
 		}
-  }
-})();
+	} catch {
+	}
+	
+}
