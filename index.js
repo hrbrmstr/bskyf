@@ -6,13 +6,14 @@ import { Subscription } from '@atproto/xrpc-server';
 import { cborToLexRecord, readCar } from '@atproto/repo';
 
 const SERVICE = 'bsky.social';
+const METHOD = 'com.atproto.sync.subscribeRepos';
 const COLLECTION = 'app.bsky.feed.post';
 const CREATE_ACTION = 'create';
 const WRAP_WIDTH = 60;
 
 const subscription = new Subscription({
   service: `wss://${SERVICE}`,
-  method: 'com.atproto.sync.subscribeRepos',
+  method: METHOD,
   getState: () => ({}),
   validate: (value) => value,
 });
@@ -42,5 +43,5 @@ for await (const event of subscription) {
 		}
 	} catch {
 	}
-	
+
 }
