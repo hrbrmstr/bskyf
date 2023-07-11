@@ -1,4 +1,4 @@
-# bskyf - poor duded bluesky firehose terminal streamer
+# bskyf - poor dude's bluesky firehose terminal streamer
 
 ```bash
 $ npm install --no-fund
