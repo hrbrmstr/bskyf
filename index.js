@@ -11,6 +11,10 @@ const COLLECTION = 'app.bsky.feed.post';
 const CREATE_ACTION = 'create';
 const WRAP_WIDTH = 60;
 
+const args = process.argv.slice(2);
+
+const searchString = (args.length === 0) ? "" : args[ 0 ].toLowerCase();
+
 const subscription = new Subscription({
   service: `wss://${SERVICE}`,
   method: METHOD,
@@ -32,16 +36,22 @@ for await (const event of subscription) {
 			const rec = cborToLexRecord(recBytes);
 
 			const coll = op.path.split('/')[ 0 ];
-			if (coll !== COLLECTION) continue;
+      if (coll !== COLLECTION) continue;
+      
+      if ((args.length === 0) || (rec.text.toLowerCase().includes(searchString))) {
 
-			console.log(
-				boxen(
-					`${chalk.blue(event.repo)} @ ${chalk.gray(rec.createdAt)}\n\n${chalk.cyan(wordwrap.wrap(rec.text, { width: WRAP_WIDTH }))}`,
-					{ padding: 1 }
-				)
-			);
-		}
-	} catch {
+        console.log(
+          boxen(
+            `${chalk.blue(event.repo)} @ ${chalk.gray(rec.createdAt)}\n\n${chalk.cyan(wordwrap.wrap(rec.text, { width: WRAP_WIDTH }))}`,
+            { padding: 1 }
+          )
+        );
+
+      }
+    }
+    
+  } catch {
+
 	}
 
 }
