@@ -22,23 +22,31 @@ const subscription = new Subscription({
   validate: (value) => value,
 });
 
-for await (const event of subscription) {
-	
-	try { 
-		const car = await readCar(event.blocks);
+/**
+ * Handles an event asynchronously.
+ * 
+ * @param {object} event - The event object to handle.
+ * @returns {Promise}
+ */
+async function handleEvent(event) {
+  try {
+    const car = await readCar(event.blocks);
 
-		for (const op of event.ops) {
-			if (op.action !== CREATE_ACTION) continue;
+    for (const op of event.ops) {
+      if (op.action !== CREATE_ACTION) continue;
 
-			const recBytes = car.blocks.get(op.cid)
-			if (!recBytes) continue;
+      const recBytes = car.blocks.get(op.cid);
+      if (!recBytes) continue;
 
-			const rec = cborToLexRecord(recBytes);
+      const rec = cborToLexRecord(recBytes);
 
-			const coll = op.path.split('/')[ 0 ];
+      const coll = op.path.split('/')[ 0 ];
       if (coll !== COLLECTION) continue;
-      
+
       if ((args.length === 0) || (rec.text.toLowerCase().includes(searchString))) {
+
+        // console.debug(event);
+        // console.debug(rec);
 
         console.log(
           boxen(
@@ -46,12 +54,13 @@ for await (const event of subscription) {
             { padding: 1 }
           )
         );
-
       }
     }
-    
   } catch {
+    // Add error handling here
+  }
+}
 
-	}
-
+for await (const event of subscription) {
+  handleEvent(event);
 }
