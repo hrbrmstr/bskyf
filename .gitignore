@@ -2,6 +2,7 @@
 node_modules
 /build
 /package
+/handles
 .env
 .env.*
 !.env.example

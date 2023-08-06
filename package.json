@@ -3,15 +3,18 @@
 	"version": "0.1.0",
 	"private": "true",
 	"type": "module",
-	"engines" : { 
-    "npm" : ">=9.5.1",
-    "node" : ">=18.16.0"
-  },
+	"engines": {
+		"npm": ">=9.5.1",
+		"node": ">=18.16.0"
+	},
 	"dependencies": {
 		"@atproto/repo": "^0.2.0",
 		"@atproto/xrpc-server": "^0.3.0",
 		"boxen": "^7.1.1",
 		"chalk": "^5.3.0",
+		"cuid": "^3.0.0",
+		"level": "^8.0.0",
+		"level-sublevel": "^6.1.1",
 		"wordwrapjs": "^5.1.0"
 	}
 }
